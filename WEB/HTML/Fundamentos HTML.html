@@ -1,0 +1,147 @@
+<!-- HTML (HyperText Markup Language) é um recurso que estrutura uma pagina WEB. 
+HTML utiliza de elementos (tags) para delimitar diferentes tipos de conteudo, 
+criando uma estrutura hierarquica clara -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos do HTML</title>
+</head>
+
+<body style="margin-bottom: 1000px; font-family: Verdana, Geneva, Tahoma, sans-serif;">
+    <p>Inicianto os Fundamentos</p>
+
+    <!-- Sintaxe de um comentario ou Ctrl + ; -->
+
+    <!--Titulos/Headings-->
+    <h1>Meu blog de viagens</h1>
+    <p>Headgins são usados com base em importancia, o H1 deve ser unico!</p>
+
+    <h2>Destinos populares</h2>
+
+    <h3>Europa</h3>
+
+    <h4>Italia</h4>
+    <p>Descubra as belezas da Italia...</p>
+
+    <h3>Asia</h3>
+
+    <h4>Japão</h4>
+    <p>Sobre o Japão...</p>
+
+    <!-- Paragrafos/Paragraph -->
+    <p>Texto onde temos maior quantidade de caracteres para explicar coisas, estes podem se repetir varias vezes</p>
+    <p>Texto onde temos maior quantidade de caracteres para explicar coisas, estes podem se repetir varias vezes</p>
+    <p>Texto onde temos maior quantidade de caracteres para explicar coisas, estes podem se repetir varias vezes</p>
+
+    <!-- Atributos -->
+    <!-- Especificos = alt, href, src -->
+    <!-- Gerais = classes, ids -->
+    
+    <!-- id = unico -->
+    <div id="secao-principal">Bloco de codigo</div>
+
+    <!-- class = repeticao -->
+    <div class="secao-secundaria">Seção secundaria 1</div>
+    <div class="secao-secundaria">Seção secundaria 2</div>
+    <div class="secao-secundaria">Seção secundaria 3</div>
+
+    <!-- Imagem ao projeto -->
+    <!-- alt = Acessibilidade -->
+    <img src="img/img1.jpg" alt="Um Castelo na Europa">
+
+    <!-- Imagem externa -->
+    <!-- br = quebra de linha -->
+    <br>
+    <img src="https://logowik.com/content/uploads/images/123_css3.jpg" alt="Logo CSS">
+
+    <!-- Links -->
+    <p>Pode-se adicionar links para sites, como a <a href="https://store.steampowered.com/">Steam</a></p>
+    <p>Também podemos fazer isso abrindo uma nova janela, <a href="https://store.steampowered.com/" target="_blank" rel="noopener noreferrer">Steam</a></p>
+
+    <!-- Listas -->
+    <!-- ol = ordered -->
+    <ol>
+        <li>Iniciar o computador</li>
+        <li>Abrir o navegador</li>
+        <li>Acessar o site desejado</li>
+    </ol>
+    
+    <!-- ul = unordered -->
+    <ul>
+        <li>Maçãs</li>
+        <li>Laranjas</li>
+        <li>Abacates</li>
+    </ul>
+
+    <!-- Aninhamento -->
+    <ul>
+        <li>Frutas
+            <ul>
+                <li>Maçãs</li>
+                <li>Bananas</li>
+            </ul>
+        </li>
+        <li>Verduras
+            <ul>
+                <li>Espinafre</li>
+                <li>Alface</li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- Elementos para formatação -->
+    <!-- negrito, italico  -->
+
+    <!-- 'strong' tem proposito semantico, o 'b' tem proposito de estilo-->
+    <p>Esse <strong>texto é muito importante</strong>, e <b>este aqui também</b></p>
+
+    <!-- span = tag para estilos de texto sem semantica -->
+    
+    <!-- 'em' tem proposito semantico, e o 'i' tem proposito de estilo -->
+    <p>Preciso <em>enfatizar esse texto aqui</em>, e <i>este tambem</i></p>
+
+    <p><s>Preciso riscar esse texto</s>, esse não</p>
+
+    <p><mark>Preciso marcar esse texto</mark>, e aqui não</p>
+
+    <p><small>Este texto é menor</small>, este não.</p>
+
+    <p><code>var a = 1;</code></p>
+
+    <p>E=mc<sup>2</sup> H<sub>2</sub>O</p> 
+
+    <!-- Elementos inline e de bloco -->
+    <!-- Inline = que ficam na mesma linha -->
+    <!-- Bloco = que pulam linha -->
+    <p>Elemento de bloco, <strong>mas os elementos de formatacão são inline</strong></p>
+    <p>Elemento de bloco, <strong>mas os elementos de formatacão são inline</strong></p>
+
+    <div>
+        Elemento de block
+        <div>Elemtemento tambem de bloco</div>
+        Estou na proxima linha
+    </div>
+
+    <!-- div -->
+     <!-- elementos que servem para criar 'caixas' no nosso site -->
+    <!-- seão, card produto, rodapé -->
+
+    <div id="cabecalho">
+        <h1>Titulo da pagina</h1>
+    </div>
+
+    <div id="corpo-do-site">
+        <p>Texto 1</p>
+        <p>Texto 2</p>
+        <p>Texto 3</p>
+    </div>
+
+    <div id="rodape">
+        <p>Direitos autorais - 2024</p>
+    </div>
+</body>
+</html>
