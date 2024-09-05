@@ -1,5 +1,9 @@
 # Python não precisa de bibliotecas para funções básicas como C, mas você pode importar módulos conforme necessário.
 
+# Importando bibliotecas
+import math  # Importa uma biblioteca padrão do Python para funções matemáticas
+from datetime import datetime  # Importa a função datetime da biblioteca datetime
+
 def limpar_entrada():
     input("Pressione Enter para continuar...")  # Uma maneira simples de "limpar" a entrada do usuário
 
@@ -55,9 +59,23 @@ def main():
 
     while x != 0:
         soma += x
-        x = int(input("Digite outro número: "))
+        x = int(input("Digite outro número (0 para encerrar): "))
 
     print(f"SOMA = {soma}")
+
+    # File I/O (Entrada e Saída de Arquivos)
+    # Abrindo um arquivo para leitura
+    with open('arquivo.txt', 'r') as file:
+        conteudo = file.read()
+        print(f"Conteúdo do arquivo: {conteudo}")
+
+    # Obtendo a hora atual e o dia atual
+    hora_atual = datetime.now().strftime("%H:%M:%S")
+    dia_atual = datetime.now().strftime("%d/%m/%Y")
+
+    # Escrevendo no arquivo com a hora e o dia
+    with open('arquivo.txt', 'w') as file:
+        file.write(f"Escrevendo no arquivo!\nAgora são {hora_atual} do dia {dia_atual}\n")
 
     # Exceções (tratamento de erros)
     try:
