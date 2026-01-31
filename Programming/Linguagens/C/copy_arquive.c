@@ -2,15 +2,49 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-int main(int argc, char **argv)
+char	*read_file(int fd, int *out_size)
+{
+	char	buffer[128];
+	char	*content = NULL;
+	char	*tmp;
+	int		size = 0;
+	int		bytes;
+	int		i;
+
+	while ((bytes = read(fd, buffer, 128)) > 0)
+	{
+		tmp = malloc(size + bytes);
+		if (!tmp)
+			return (NULL);
+
+		i = 0;
+		while (i < size)
+		{
+			tmp[i] = content[i];
+			i++;
+		}
+
+		i = 0;
+		while (i < bytes)
+		{
+			tmp[size + i] = buffer[i];
+			i++;
+		}
+
+		free(content);
+		content = tmp;
+		size += bytes;
+	}
+
+	*out_size = size;
+	return (content);
+}
+
+int	main(int argc, char **argv)
 {
 	int		fd;
-	int		bytes;
-    int     i;
-	char	buffer[128];
-
-	char	*content = NULL; // onde vamos guardar tudo
-	int		size = 0;        // tamanho atual armazenado
+	int		size;
+	char	*content;
 
 	if (argc != 2)
 		return (1);
@@ -19,36 +53,14 @@ int main(int argc, char **argv)
 	if (fd < 0)
 		return (1);
 
-    while ((bytes = read(fd, buffer, 128)) > 0)
-    {
-        char *tmp = malloc(size + bytes);
-        if (!tmp)
-            return (1);
-
-        int i = 0;
-        while (i < size)
-        {
-            tmp[i] = content[i];
-            i++;
-        }
-
-        i = 0;
-        while (i < bytes)
-        {
-            tmp[size + i] = buffer[i];
-            i++;
-        }
-
-        free(content);
-        content = tmp;
-        size += bytes;
-    }
+	content = read_file(fd, &size);
 	close(fd);
 
-	// imprime tudo de uma vez
-	if (content)
-	{
-		write(1, content, size);
-		free(content);
-	}
+	if (!content)
+		return (1);
+
+	write(1, content, size);
+	free(content);
+
+	return (0);
 }
