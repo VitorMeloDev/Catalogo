@@ -1,56 +1,46 @@
 #include <stdio.h>
 
-int main(void)
+int main(int argc, char **argv)
 {
-	char *number = "2363";
-	int len = 0;
-	int i = 0;
+	if (argc != 2)
+		return (1);
 
-	/* descobre o tamanho */
+	char *number = argv[1];
+	int len = 0;
+
+	/* tamanho */
 	while (number[len])
 		len++;
 
-	while (i < len)
+	for (int i = 0; i < len; i++)
 	{
-		int zeros = len - i - 1;
 		char digit = number[i];
+
+		/* valida dígito */
+		if (digit < '0' || digit > '9')
+			return (1);
 
 		/* ignora zero */
 		if (digit == '0')
-		{
-			i++;
 			continue;
-		}
 
-		/* caso especial: 10–19 */
-		if (zeros == 1 && digit == '1')
-		{
-			printf("%c%c ", number[i], number[i + 1]);
-			i += 2;
-			continue;
-		}
+		int zeros = len - i - 1;
 
-		/* dezenas (20, 30, 40...) */
-		if (zeros == 1)
+		/* imprime: digit - scale */
+		printf("%c - ", digit);
+
+		if (zeros == 0)
 		{
-			printf("%c0 ", digit);
+			printf("1");
 		}
-		/* centenas ou mais (100, 1000, 10000...) */
-		else if (zeros >= 2)
+		else
 		{
-			printf("%c", digit);
 			printf("1");
 			while (zeros--)
 				printf("0");
-			printf(" ");
-		}
-		/* unidade */
-		else
-		{
-			printf("%c ", digit);
 		}
 
-		i++;
+		printf(" ");
 	}
 
 	printf("\n");
