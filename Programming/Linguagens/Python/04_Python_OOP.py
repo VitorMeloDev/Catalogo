@@ -1,5 +1,5 @@
 # Python OOP
-# Classes, Objects, Inheritance, Composition and Polymorphism
+# Classes, Objects, Inheritance, Composition, Abstraction and Polymorphism
 
 
 # ==========================================================
@@ -211,6 +211,68 @@ print(warrior.weapon)
 
 
 # ==========================================================
+# Abstract Base Class (ABC)
+# ==========================================================
+
+import abc
+
+
+class DataProcessor(abc.ABC):
+
+    @abc.abstractmethod
+    def validate(self, data: object) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def ingest(self, data: object) -> None:
+        pass
+
+    def output(self) -> None:
+        print("Output data")
+
+
+class NumericProcessor(DataProcessor):
+
+    def validate(self, data: object) -> bool:
+        return isinstance(data, (int, float))
+
+    def ingest(self, data: object) -> None:
+        print(f"Ingesting numeric data: {data}")
+
+
+processor = NumericProcessor()
+
+print(processor.validate(42))
+processor.ingest(42)
+processor.output()
+
+
+# ==========================================================
+# Abstract Class Cannot Be Instantiated
+# ==========================================================
+
+class AnimalProcessor(abc.ABC):
+
+    @abc.abstractmethod
+    def process(self, data: str) -> None:
+        pass
+
+
+# AnimalProcessor()  # TypeError: abstract class
+
+
+class DogProcessor(AnimalProcessor):
+
+    def process(self, data: str) -> None:
+        print(f"Processing dog data: {data}")
+
+
+dog_processor = DogProcessor()
+
+dog_processor.process("Dog")
+
+
+# ==========================================================
 # Method Overriding
 # ==========================================================
 
@@ -247,12 +309,89 @@ class Bow:
         print("Bow attack")
 
 
-def perform_attack(weapon: object) -> None:
+def perform_attack(weapon: Sword | Bow) -> None:
     weapon.attack()
 
 
 perform_attack(Sword())
 perform_attack(Bow())
+
+
+# ==========================================================
+# Polymorphism Through a Common Base Class
+# ==========================================================
+
+class Weapon(abc.ABC):
+
+    @abc.abstractmethod
+    def attack(self) -> None:
+        pass
+
+
+class Sword(Weapon):
+
+    def attack(self) -> None:
+        print("Sword attack")
+
+
+class Bow(Weapon):
+
+    def attack(self) -> None:
+        print("Bow attack")
+
+
+def use_weapon(weapon: Weapon) -> None:
+    weapon.attack()
+
+
+use_weapon(Sword())
+use_weapon(Bow())
+
+
+# ==========================================================
+# Polymorphism With Data Processors
+# ==========================================================
+
+class Processor(abc.ABC):
+
+    @abc.abstractmethod
+    def validate(self, data: object) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def ingest(self, data: object) -> None:
+        pass
+
+
+class NumericProcessor(Processor):
+
+    def validate(self, data: object) -> bool:
+        return isinstance(data, (int, float))
+
+    def ingest(self, data: object) -> None:
+        print(f"Numeric processor: {data}")
+
+
+class TextProcessor(Processor):
+
+    def validate(self, data: object) -> bool:
+        return isinstance(data, str)
+
+    def ingest(self, data: object) -> None:
+        print(f"Text processor: {data}")
+
+
+def process_data(
+    processor: Processor,
+    data: object
+) -> None:
+
+    if processor.validate(data):
+        processor.ingest(data)
+
+
+process_data(NumericProcessor(), 42)
+process_data(TextProcessor(), "Hello")
 
 
 # ==========================================================
@@ -278,6 +417,76 @@ class Car:
 car = Car()
 
 car.start()
+
+
+# ==========================================================
+# Protocol
+# ==========================================================
+
+from typing import Protocol
+
+
+class ExportPlugin(Protocol):
+
+    def process_output(self, data: list[str]) -> None:
+        ...
+
+
+class CSVPlugin:
+
+    def process_output(self, data: list[str]) -> None:
+        print(",".join(data))
+
+
+class JSONPlugin:
+
+    def process_output(self, data: list[str]) -> None:
+        print(data)
+
+
+def export_data(
+    plugin: ExportPlugin,
+    data: list[str]
+) -> None:
+
+    plugin.process_output(data)
+
+
+csv_plugin = CSVPlugin()
+json_plugin = JSONPlugin()
+
+export_data(csv_plugin, ["one", "two", "three"])
+export_data(json_plugin, ["one", "two", "three"])
+
+
+# ==========================================================
+# Protocol Does Not Require Inheritance
+# ==========================================================
+
+class Logger(Protocol):
+
+    def log(self, message: str) -> None:
+        ...
+
+
+class ConsoleLogger:
+
+    def log(self, message: str) -> None:
+        print(message)
+
+
+class FileLogger:
+
+    def log(self, message: str) -> None:
+        print(f"Writing to file: {message}")
+
+
+def write_log(logger: Logger, message: str) -> None:
+    logger.log(message)
+
+
+write_log(ConsoleLogger(), "Application started")
+write_log(FileLogger(), "Application started")
 
 
 # ==========================================================
