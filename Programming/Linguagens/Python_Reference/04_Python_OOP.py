@@ -1,5 +1,13 @@
 # Python OOP
-# Classes, Objects, Inheritance, Composition, Abstraction and Polymorphism
+# Classes, inheritance, abstraction, polymorphism, composition and Protocol
+#
+# Main ideas:
+# Class       = blueprint for objects
+# Inheritance = reuse and specialization
+# Overriding  = replace inherited behavior
+# ABC         = define a required interface
+# Polymorphism = same interface, different behavior
+# Protocol    = structural interface ("if it has the methods, it fits")
 
 
 # ==========================================================
@@ -16,7 +24,7 @@ print(type(player))
 
 
 # ==========================================================
-# Constructor
+# Constructor and Attributes
 # ==========================================================
 
 class Character:
@@ -47,7 +55,6 @@ class Player:
 
 
 player = Player("Knight")
-
 player.level_up()
 
 print(player.level)
@@ -62,18 +69,18 @@ class Account:
     def __init__(self, balance: float) -> None:
         self._balance = balance
 
-    def get_balance(self) -> float:
-        return self._balance
-
     def deposit(self, amount: float) -> None:
+
         if amount <= 0:
             raise ValueError("Amount must be positive")
 
         self._balance += amount
 
+    def get_balance(self) -> float:
+        return self._balance
+
 
 account = Account(100)
-
 account.deposit(50)
 
 print(account.get_balance())
@@ -94,6 +101,7 @@ class Person:
 
     @age.setter
     def age(self, value: int) -> None:
+
         if value < 0:
             raise ValueError("Age cannot be negative")
 
@@ -122,8 +130,8 @@ class Enemy:
         Enemy.total_enemies += 1
 
 
-enemy1 = Enemy("Goblin")
-enemy2 = Enemy("Orc")
+Enemy("Goblin")
+Enemy("Orc")
 
 print(Enemy.total_enemies)
 
@@ -190,6 +198,9 @@ dog.bark()
 # ==========================================================
 # super()
 # ==========================================================
+# super() accesses behavior from the parent class.
+# It is commonly used when a child extends a parent's __init__.
+
 
 class Character:
 
@@ -211,8 +222,33 @@ print(warrior.weapon)
 
 
 # ==========================================================
+# Method Overriding
+# ==========================================================
+# A child class provides its own implementation of an
+# inherited method.
+
+
+class Enemy:
+
+    def attack(self) -> None:
+        print("Generic attack")
+
+
+class Goblin(Enemy):
+
+    def attack(self) -> None:
+        print("Goblin attack")
+
+
+Goblin().attack()
+
+
+# ==========================================================
 # Abstract Base Class (ABC)
 # ==========================================================
+# An ABC defines a contract for subclasses.
+# abstractmethod means concrete subclasses must implement it.
+
 
 import abc
 
@@ -227,8 +263,8 @@ class DataProcessor(abc.ABC):
     def ingest(self, data: object) -> None:
         pass
 
-    def output(self) -> None:
-        print("Output data")
+    def output(self) -> tuple[int, str]:
+        return 0, "data"
 
 
 class NumericProcessor(DataProcessor):
@@ -237,89 +273,25 @@ class NumericProcessor(DataProcessor):
         return isinstance(data, (int, float))
 
     def ingest(self, data: object) -> None:
-        print(f"Ingesting numeric data: {data}")
+        print(f"Numeric data: {data}")
 
 
 processor = NumericProcessor()
 
 print(processor.validate(42))
 processor.ingest(42)
-processor.output()
+print(processor.output())
 
 
-# ==========================================================
-# Abstract Class Cannot Be Instantiated
-# ==========================================================
-
-class AnimalProcessor(abc.ABC):
-
-    @abc.abstractmethod
-    def process(self, data: str) -> None:
-        pass
-
-
-# AnimalProcessor()  # TypeError: abstract class
-
-
-class DogProcessor(AnimalProcessor):
-
-    def process(self, data: str) -> None:
-        print(f"Processing dog data: {data}")
-
-
-dog_processor = DogProcessor()
-
-dog_processor.process("Dog")
-
-
-# ==========================================================
-# Method Overriding
-# ==========================================================
-
-class Enemy:
-
-    def attack(self) -> None:
-        print("Generic attack")
-
-
-class Goblin(Enemy):
-
-    def attack(self) -> None:
-        print("Goblin attack")
-
-
-enemy = Goblin()
-
-enemy.attack()
+# DataProcessor() would fail because abstract methods
+# have not been implemented.
 
 
 # ==========================================================
 # Polymorphism
 # ==========================================================
+# Different classes can be used through the same interface.
 
-class Sword:
-
-    def attack(self) -> None:
-        print("Sword attack")
-
-
-class Bow:
-
-    def attack(self) -> None:
-        print("Bow attack")
-
-
-def perform_attack(weapon: Sword | Bow) -> None:
-    weapon.attack()
-
-
-perform_attack(Sword())
-perform_attack(Bow())
-
-
-# ==========================================================
-# Polymorphism Through a Common Base Class
-# ==========================================================
 
 class Weapon(abc.ABC):
 
@@ -340,16 +312,16 @@ class Bow(Weapon):
         print("Bow attack")
 
 
-def use_weapon(weapon: Weapon) -> None:
+def perform_attack(weapon: Weapon) -> None:
     weapon.attack()
 
 
-use_weapon(Sword())
-use_weapon(Bow())
+perform_attack(Sword())
+perform_attack(Bow())
 
 
 # ==========================================================
-# Polymorphism With Data Processors
+# Polymorphism in Data Processing
 # ==========================================================
 
 class Processor(abc.ABC):
@@ -363,40 +335,39 @@ class Processor(abc.ABC):
         pass
 
 
-class NumericProcessor(Processor):
+class NumericDataProcessor(Processor):
 
     def validate(self, data: object) -> bool:
         return isinstance(data, (int, float))
 
     def ingest(self, data: object) -> None:
-        print(f"Numeric processor: {data}")
+        print(f"Numeric: {data}")
 
 
-class TextProcessor(Processor):
+class TextDataProcessor(Processor):
 
     def validate(self, data: object) -> bool:
         return isinstance(data, str)
 
     def ingest(self, data: object) -> None:
-        print(f"Text processor: {data}")
+        print(f"Text: {data}")
 
 
-def process_data(
-    processor: Processor,
-    data: object
-) -> None:
+def process_data(processor: Processor, data: object) -> None:
 
     if processor.validate(data):
         processor.ingest(data)
 
 
-process_data(NumericProcessor(), 42)
-process_data(TextProcessor(), "Hello")
+process_data(NumericDataProcessor(), 42)
+process_data(TextDataProcessor(), "Hello")
 
 
 # ==========================================================
 # Composition
 # ==========================================================
+# Composition means one object contains another object.
+
 
 class Engine:
 
@@ -414,14 +385,15 @@ class Car:
         print("Car started")
 
 
-car = Car()
-
-car.start()
+Car().start()
 
 
 # ==========================================================
 # Protocol
 # ==========================================================
+# Protocol describes what an object must provide.
+# A class does not need to inherit from the Protocol.
+
 
 from typing import Protocol
 
@@ -444,49 +416,12 @@ class JSONPlugin:
         print(data)
 
 
-def export_data(
-    plugin: ExportPlugin,
-    data: list[str]
-) -> None:
-
+def export_data(plugin: ExportPlugin, data: list[str]) -> None:
     plugin.process_output(data)
 
 
-csv_plugin = CSVPlugin()
-json_plugin = JSONPlugin()
-
-export_data(csv_plugin, ["one", "two", "three"])
-export_data(json_plugin, ["one", "two", "three"])
-
-
-# ==========================================================
-# Protocol Does Not Require Inheritance
-# ==========================================================
-
-class Logger(Protocol):
-
-    def log(self, message: str) -> None:
-        ...
-
-
-class ConsoleLogger:
-
-    def log(self, message: str) -> None:
-        print(message)
-
-
-class FileLogger:
-
-    def log(self, message: str) -> None:
-        print(f"Writing to file: {message}")
-
-
-def write_log(logger: Logger, message: str) -> None:
-    logger.log(message)
-
-
-write_log(ConsoleLogger(), "Application started")
-write_log(FileLogger(), "Application started")
+export_data(CSVPlugin(), ["one", "two", "three"])
+export_data(JSONPlugin(), ["one", "two", "three"])
 
 
 # ==========================================================
@@ -501,29 +436,7 @@ class Outer:
             print("Hello from Inner")
 
 
-inner = Outer.Inner()
-
-inner.hello()
-
-
-# ==========================================================
-# Standalone Functions with Objects
-# ==========================================================
-
-class Rectangle:
-
-    def __init__(self, width: float, height: float) -> None:
-        self.width = width
-        self.height = height
-
-
-def area(rectangle: Rectangle) -> float:
-    return rectangle.width * rectangle.height
-
-
-rectangle = Rectangle(10, 5)
-
-print(area(rectangle))
+Outer.Inner().hello()
 
 
 # ==========================================================

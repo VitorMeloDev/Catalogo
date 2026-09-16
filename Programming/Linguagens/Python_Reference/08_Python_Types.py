@@ -1,21 +1,19 @@
-# Python Types
-# Type Hints, Generic Collections, Optional Values and Type Checking
+# Python Types and Type Hints
+# Type annotations, generic collections and static analysis
 
 
 # ==========================================================
-# Basic Type Hints
+# Basic Annotations
 # ==========================================================
 
-name: str = "Vitor"
-age: int = 25
-height: float = 1.71
-active: bool = True
-
-print(name, age, height, active)
+name: str = "Knight"
+level: int = 10
+health: float = 100.0
+alive: bool = True
 
 
 # ==========================================================
-# Function Type Hints
+# Function Annotations
 # ==========================================================
 
 def add(a: int, b: int) -> int:
@@ -29,97 +27,47 @@ print(add(10, 20))
 # None
 # ==========================================================
 
-def print_name(name: str) -> None:
-    print(name)
-
-
-print_name("Vitor")
+def print_message(message: str) -> None:
+    print(message)
 
 
 # ==========================================================
-# List Type Hints
+# Generic Collections
 # ==========================================================
 
 numbers: list[int] = [1, 2, 3]
-
-names: list[str] = [
-    "Alice",
-    "Bob",
-    "Charlie"
-]
-
-print(numbers)
-print(names)
-
-
-# ==========================================================
-# Tuple Type Hints
-# ==========================================================
-
-position: tuple[float, float] = (10.5, 20.0)
-
-print(position)
-
-
-# ==========================================================
-# Set Type Hints
-# ==========================================================
-
-unique_ids: set[int] = {1, 2, 3}
-
-print(unique_ids)
-
-
-# ==========================================================
-# Dictionary Type Hints
-# ==========================================================
-
-scores: dict[str, int] = {
-    "Vitor": 100,
-    "Alice": 90
-}
-
-print(scores)
+names: list[str] = ["Knight", "Mage"]
+scores: dict[str, int] = {"Vitor": 100}
+point: tuple[int, int] = (10, 20)
+ids: set[int] = {1, 2, 3}
 
 
 # ==========================================================
 # Union
 # ==========================================================
 
-def print_id(identifier: int | str) -> None:
-    print(identifier)
+identifier: int | str
 
-
-print_id(10)
-print_id("ABC")
+identifier = 42
+identifier = "player-42"
 
 
 # ==========================================================
-# Optional Values
+# None as a Possible Value
 # ==========================================================
 
-def find_player(player_id: int) -> str | None:
+def find_name(active: bool) -> str | None:
 
-    if player_id == 1:
+    if active:
         return "Knight"
 
     return None
 
 
-player = find_player(2)
+name = find_name(False)
 
-print(player)
-
-
-# ==========================================================
-# Type Alias
-# ==========================================================
-
-PlayerID = int | str
-
-player_id: PlayerID = "PLAYER_001"
-
-print(player_id)
+if name is not None:
+    print(name)
 
 
 # ==========================================================
@@ -128,12 +76,10 @@ print(player_id)
 
 from typing import Any
 
-value: Any = 10
+value: Any = 42
 
-value = "Python"
-value = True
-
-print(value)
+value = "text"
+value = [1, 2, 3]
 
 
 # ==========================================================
@@ -145,11 +91,7 @@ from collections.abc import Callable
 Operation = Callable[[int, int], int]
 
 
-def multiply(a: int, b: int) -> int:
-    return a * b
-
-
-def execute(
+def calculate(
     operation: Operation,
     a: int,
     b: int
@@ -157,11 +99,11 @@ def execute(
     return operation(a, b)
 
 
-print(execute(multiply, 5, 4))
+print(calculate(add, 5, 3))
 
 
 # ==========================================================
-# Generic Functions
+# TypeVar
 # ==========================================================
 
 from typing import TypeVar
@@ -174,34 +116,52 @@ def first(items: list[T]) -> T:
 
 
 print(first([1, 2, 3]))
-print(first(["A", "B", "C"]))
+print(first(["a", "b", "c"]))
 
 
 # ==========================================================
-# Type Checking
+# isinstance and Type Narrowing
 # ==========================================================
 
-value = 10
-
-print(isinstance(value, int))
-print(isinstance(value, str))
-
-
-# ==========================================================
-# Type Narrowing
-# ==========================================================
-
-def describe(value: int | str) -> None:
+def describe(value: object) -> str:
 
     if isinstance(value, int):
-        print(value + 10)
+        return "integer"
 
-    else:
-        print(value.upper())
+    if isinstance(value, str):
+        return "string"
+
+    return "other"
 
 
-describe(10)
-describe("python")
+print(describe(42))
+print(describe("Python"))
+
+
+# ==========================================================
+# Protocol
+# ==========================================================
+
+from typing import Protocol
+
+
+class Printable(Protocol):
+
+    def print_info(self) -> str:
+        ...
+
+
+class Player:
+
+    def print_info(self) -> str:
+        return "Player"
+
+
+def show_info(value: Printable) -> None:
+    print(value.print_info())
+
+
+show_info(Player())
 
 
 # ==========================================================
@@ -212,16 +172,12 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Player:
-    name: str
-    level: int
+class Point:
+    x: int
+    y: int
 
 
-player = Player("Knight", 10)
-
-print(player)
-print(player.name)
-print(player.level)
+print(Point(10, 20))
 
 
 # ==========================================================
